@@ -1,1 +1,1 @@
-Random terminal utilities to make my life a bit easier
+Assorted terminal utilities to make my life a bit easier
