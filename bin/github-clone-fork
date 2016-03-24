@@ -15,19 +15,23 @@ else:
 
 def shell(cmd):
     print("$ %s" % cmd)
-    os.system(cmd)
+    exitcode = os.system(cmd)
+    if exitcode:
+        raise RuntimeError("%r failed" % cmd)
 
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('upstream', metavar='org/repo',
                     help='URI of repo on github.com, e.g. gwpy/gwpy')
-parser.add_argument('user', help='username of fork owner',
-                    default=DEFAULT_USER, nargs=DEFAULT_USER and '?' or 1)
-parser.add_argument('-o', '--clone-dir',
-                    help='target directory for clone',
-                    default='./{repo}-fork')
+parser.add_argument('target', help='target directory for clone',
+                    metavar='DIR')
+parser.add_argument('-u', '--user', help='username of fork owner',
+                    default=DEFAULT_USER, required=DEFAULT_USER is None)
 parser.add_argument('-s', '--git-server', default='https://github.com',
                     help='URL of git server, default: %(default)s')
+parser.add_argument('--update', action='store_true', default=False,
+                    help='update the fork from upstream, '
+                         'default: %(default)s')
 
 args = parser.parse_args()
 
@@ -39,13 +43,15 @@ except ValueError:
 upstream = '%s/%s/%s.git' % (args.git_server, org, repo)
 fork = '%s/%s/%s.git' % (args.git_server, args.user, repo)
 
-target = args.clone_dir
-if target is None:
-    target = '%s-fork' % repo
+# clone the repo
+os.system('git clone %s %s' % (fork, args.target))
 
-os.system('git clone %s %s' % (fork, target))
-
-os.chdir(target)
+# enter the clone
+os.chdir(args.target)
+# link the original to the fork as 'upstream'
 os.system('git remote add upstream %s' % upstream)
-os.system('git pull --rebase upstream master')
-print("Fork is ready")
+# update the fork from upstream
+if args.update:
+    os.system('git pull --rebase upstream master')
+    os.system('git push')
+print("Fork is ready in %s" % args.target)
