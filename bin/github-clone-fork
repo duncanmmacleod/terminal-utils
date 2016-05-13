@@ -20,7 +20,9 @@ def shell(cmd):
         raise RuntimeError("%r failed" % cmd)
 
 
-parser = argparse.ArgumentParser(description=__doc__)
+parser = argparse.ArgumentParser(
+    description=__doc__,
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('upstream', metavar='org/repo',
                     help='URI of repo on github.com, e.g. gwpy/gwpy')
 parser.add_argument('target', help='target directory for clone',
@@ -28,10 +30,9 @@ parser.add_argument('target', help='target directory for clone',
 parser.add_argument('-u', '--user', help='username of fork owner',
                     default=DEFAULT_USER, required=DEFAULT_USER is None)
 parser.add_argument('-s', '--git-server', default='https://github.com',
-                    help='URL of git server, default: %(default)s')
+                    help='URL of git server')
 parser.add_argument('--update', action='store_true', default=False,
-                    help='update the fork from upstream, '
-                         'default: %(default)s')
+                    help='update the fork from upstream')
 
 args = parser.parse_args()
 
