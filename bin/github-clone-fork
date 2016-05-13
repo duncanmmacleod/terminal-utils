@@ -35,6 +35,8 @@ parser.add_argument('--update', action='store_true', default=False,
                     help='update the fork from upstream')
 parser.add_argument('--no-recursive', action='store_true', default=False,
                     help='don\'t clone in a --recursive way')
+parser.add_argument('--verbose', action='store_true', default=False,
+                    help='don\'t use --quiet git commands')
 
 args = parser.parse_args()
 
@@ -50,6 +52,8 @@ fork = '%s/%s/%s.git' % (args.git_server, args.user, repo)
 cloneargs = [fork, args.target]
 if not args.no_recursive:
     cloneargs.insert(0, '--recursive')
+if not args.verbose:
+    cloneargs.insert(0, '--quiet')
 shell('git clone %s' % ' '.join(cloneargs))
 
 # enter the clone
@@ -58,6 +62,10 @@ os.chdir(args.target)
 shell('git remote add upstream %s' % upstream)
 # update the fork from upstream
 if args.update:
-    shell('git pull --rebase upstream master')
-    shell('git push')
+    if args.verbose:
+        shell('git pull --rebase upstream master')
+        shell('git push')
+    else:
+        shell('git pull --quiet --rebase upstream master')
+        shell('git push --quiet')
 print("Fork is ready in %s" % args.target)
