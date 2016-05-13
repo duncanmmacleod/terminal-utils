@@ -33,6 +33,8 @@ parser.add_argument('-s', '--git-server', default='https://github.com',
                     help='URL of git server')
 parser.add_argument('--update', action='store_true', default=False,
                     help='update the fork from upstream')
+parser.add_argument('--no-recursive', action='store_true', default=False,
+                    help='don\'t clone in a --recursive way')
 
 args = parser.parse_args()
 
@@ -45,7 +47,10 @@ upstream = '%s/%s/%s.git' % (args.git_server, org, repo)
 fork = '%s/%s/%s.git' % (args.git_server, args.user, repo)
 
 # clone the repo
-os.system('git clone %s %s' % (fork, args.target))
+cloneargs = [fork, args.target]
+if not args.no_recursive:
+    cloneargs.insert(0, '--recursive')
+shell('git clone %s' % ' '.join(cloneargs))
 
 # enter the clone
 os.chdir(args.target)
