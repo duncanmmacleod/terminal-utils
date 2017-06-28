@@ -45,8 +45,12 @@ try:
 except ValueError:
     org = repo = args.upstream
 
-upstream = '%s/%s/%s.git' % (args.git_server, org, repo)
-fork = '%s/%s/%s.git' % (args.git_server, args.user, repo)
+if args.git_server.startswith('git@'):
+    prefix = '%s:' % args.git_server
+else:
+    prefix = '%s/' % args.git_server
+upstream = '%s%s/%s.git' % (prefix, org, repo)
+fork = '%s%s/%s.git' % (prefix, args.user, repo)
 
 # clone the repo
 cloneargs = [fork, args.target]
