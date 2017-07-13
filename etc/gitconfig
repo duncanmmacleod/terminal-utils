@@ -1,0 +1,8 @@
+[log]
+	decorate = full
+[color]
+	ui = true
+[alias]
+	spull = !git stash && git pull --rebase && git stash apply
+	upfork = !git pull --rebase upstream master
+	upforkd = !git pull --rebase upstream develop
