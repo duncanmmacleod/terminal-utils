@@ -1,0 +1,94 @@
+" .vimrc : global commands for vim
+"
+" this file should be cross-platform, hopefully
+"
+
+" keep 100 lines of history
+set history=100
+
+" show the cursor position
+set ruler
+
+" use syntax highlighting
+syntax on
+
+" use solarized
+set background=dark
+"colorscheme solarized
+
+" highlight the last searched term
+set hlsearch
+
+" use the file type plugins
+filetype plugin on
+
+" don't auto indent
+filetype indent off
+
+" don't auto comment
+au FileType * setl fo=cql
+
+" set tabs to look like four spaces
+set tabstop=4
+
+" define backspace
+set backspace=indent,eol,start
+
+" set smart search
+set ignorecase
+set smartcase
+
+" restore cursor position
+autocmd BufReadPost * if ! exists("g:leave_my_cursor_position_alone") |
+    \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+        \ exe "normal g'\"" |
+    \ endif |
+\ endif
+
+" enable spell checker for a few file types
+set spellfile=~/.vim/spellfile.add
+set spelllang=en_gb
+autocmd BufNewFile,BufRead *.tex set spell
+autocmd BufNewFile,BufRead *.latex set spell
+autocmd BufNewFile,BufRead *.txt set spell
+autocmd BufNewFile,BufRead *.rst set spell
+
+fun! IgnoreCamelCaseSpell()
+    syn match CamelCase /\<[A-Z][a-z]\+[A-Z].\{-}\>/ contains=@NoSpell transparent
+    syn cluster Spell add=CamelCase
+endfun
+autocmd BufRead,BufNewFile * :call IgnoreCamelCaseSpell()
+
+fun! IgnoreUpperCaseSpell()
+    syn match UPPERCASE /\<[A-Z]\+.\{-}\>/ contains=@NoSpell transparent
+    syn cluster Spell add=UPPERCASE
+endfun
+autocmd BufRead,BufNewFile * :call IgnoreUpperCaseSpell()
+
+" set template for new files
+autocmd! BufNewFile * silent! 0r ~/.vim/templates/%:e.%:e
+
+" recognise git config files
+au BufNewFile,BufRead */gitconfig setf gitconfig
+
+" set shortcut for make
+map <F5> <Esc>:w<CR>:!make<CR>
+
+" don't expand tabs in Makefiles
+autocmd FileType Makefile set noexpandtab
+
+" highlight whitespace
+set list
+set listchars=tab:>-,trail:.,extends:>,precedes:<,nbsp:%
+
+" mapping to remove trailing whitespace
+nnoremap <silent> <F6> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
+
+" set latex flavour
+let g:tex_flavor = "latex"
+
+" tell vim to no spell check comments in tex
+let g:tex_comment_nospell=1
+
+" set modelines
+set modeline
