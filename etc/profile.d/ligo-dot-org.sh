@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Profile setter for LIGO.ORG Kerberos and X509
 #
@@ -10,21 +11,33 @@
 if [ -f ${KRB5_KTNAME} ]; then
     # run kinit using keytab
     export KRB5_KTNAME
-    klist -s > /dev/null 2>&1
-    if [ "$?" -eq 1 -a -n "${LIGO_USER}" ]; then
-        kinit -kft ${KRB5_KTNAME} ${LIGO_USER}@LIGO.ORG 1> /dev/null 2>&1 &&
-        echo "Kerberos ticket generated for ${LIGO_USER}"
+    alias kget="kinit -kft ${KRB5_KTNAME} ${LIGO_USER}@LIGO.ORG"
+    klist -s &> /dev/null
+    if [ "$?" -ne 0 ] && [ -n "${LIGO_USER}" ]; then
+        kget &> /dev/null && echo "Kerberos ticket generated for ${LIGO_USER}"
     fi
 
-    # set alias for kerberos-based init
-    alias lpi="ligo-proxy-init -k"
+    # set function for kerberos-based init
+    lpi() {
+        klist -s &> /dev/null || \
+            kinit -kft ${KRB5_KTNAME} ${LIGO_USER}@LIGO.ORG
+        ligo-proxy-init -k 1> /dev/null
+    }
 
-    # use kerberos for ligo-proxy-init
-    command grid-proxy-info -exists -valid 00:01 1>/dev/null 2>&1 || lpi
-
-    # alias gsi commands to check grid-proxy before running
-    alias gsissh="(command grid-proxy-info -exists -valid 00:01 \
-                   1>/dev/null 2>&1 || lpi) && gsissh"
-    alias gsiscp="(command grid-proxy-info -exists -valid 00:01 \
-                   1>/dev/null 2>&1 || lpi) && gsiscp"
+else
+    # set alias for init
+    alias lpi="ligo-proxy-init"
 fi
+
+# use kerberos for ligo-proxy-init
+grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
+
+# override gsi commands to check grid-proxy before running
+function gsissh {
+    grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
+    command gsissh $@
+}
+function gsiscp {
+    grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
+    command gsiscp $@
+}

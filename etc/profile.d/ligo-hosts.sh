@@ -28,6 +28,8 @@ export LHOPCDEV1=ldas-pcdev1.ligo-wa.caltech.edu
 alias lhopcdev1="echo $ gsissh ${LHOPCDEV1}; gsissh ${LHOPCDEV1}"
 export LHOPCDEV2=ldas-pcdev2.ligo-wa.caltech.edu
 alias lhopcdev2="echo $ gsissh ${LHOPCDEV2}; gsissh ${LHOPCDEV2}"
+export LHOPCDEV5=ldas-pcdev5.ligo-wa.caltech.edu
+alias lhopcdev5="echo $ gsissh ${LHOPCDEV5}; gsissh ${LHOPCDEV5}"
 
 
 # LIGO Livingston
@@ -37,6 +39,8 @@ export LLOPCDEV1=ldas-pcdev1.ligo-la.caltech.edu
 alias llopcdev1="echo $ gsissh ${LLOPCDEV1}; gsissh ${LLOPCDEV1}"
 export LLOPCDEV2=ldas-pcdev2.ligo-la.caltech.edu
 alias llopcdev2="echo $ gsissh ${LLOPCDEV2}; gsissh ${LLOPCDEV2}"
+export LLOPCDEV5=ldas-pcdev5.ligo-la.caltech.edu
+alias llopcdev5="echo $ gsissh ${LLOPCDEV5}; gsissh ${LLOPCDEV5}"
 
 
 # MIT
