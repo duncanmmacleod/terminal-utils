@@ -33,9 +33,18 @@ pip-reinstall() {
 # -- warnings -----------------------------------------------------------------
 
 # always show DeprecationWarnings
-PYTHONWARNINGS="${PYTHONWARNINGS},always::DeprecationWarning"
+PYTHONWARNINGS="${PYTHONWARNINGS},always::DeprecationWarning,always::PendingDeprecationWarning"
 
 # hide annoying type warnings from backports.configparser
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:You passed a bytestring:DeprecationWarning"
+
+# hide warnings about SafeConfigParser
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:The SafeConfigParser:DeprecationWarning"
+
+# hide warnings about parser.read_file
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:This method will be removed in future versions.  Use 'parser.read_file()' instead:DeprecationWarning"
+
+# hide warnings about elementwise comparisons
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:elementwise != comparison failed; this will raise an error in the future:DeprecationWarning"
 
 export PYTHONWARNINGS
