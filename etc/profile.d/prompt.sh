@@ -37,18 +37,7 @@ _prompt_git_branch() {
 }
 
 _prompt_user_host() {
-    case $USER in
-        root|detchar|cbc)
-            echo "\u@\h"
-            ;;
-        *)
-            echo "\h"
-            ;;
-    esac
-}
-
-_prompt_color() {
-    case $USER in
+    case `whoami` in
         root|detchar|cbc)
             echo "\[\033[${_COLOR_LIGHT_RED}m\]\u@\h"
             ;;
