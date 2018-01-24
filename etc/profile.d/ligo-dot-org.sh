@@ -29,17 +29,15 @@ else
     alias lpi="ligo-proxy-init"
 fi
 
-if [ -f "${X509_USER_PROXY}" ]; then
-    # use kerberos for ligo-proxy-init
-    grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
+# use kerberos for ligo-proxy-init
+grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
 
-    # override gsi commands to check grid-proxy before running
-    function gsissh {
-        grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
-        command gsissh $@
-    }
-    function gsiscp {
-        grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
-        command gsiscp $@
-    }
-fi
+# override gsi commands to check grid-proxy before running
+function gsissh {
+    grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
+    command gsissh $@
+}
+function gsiscp {
+    grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
+    command gsiscp $@
+}
