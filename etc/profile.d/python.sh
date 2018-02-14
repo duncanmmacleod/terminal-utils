@@ -16,19 +16,12 @@ PATH=${PYTHON_USER_BASE}/bin:${PATH}
 # -- utilities ----------------------------------------------------------------
 
 pip-reinstall() {
-    local package=$1
-    shift
-    local version=$1
-    shift
-    if [ -z ${version} ]; then
-        pip_="pip"
-    else
-        pip_="pip-${version}"
-    fi
-    local cmd="${pip_} uninstall ${package} -yq && ${pip_} install -q . $@"
+    local cmd="python -m pip install . --quiet --upgrade --upgrade-strategy=only-if-needed"
     echo "$ ${cmd}"
     eval ${cmd}
 }
+
+alias pipr="pip-reinstall"
 
 # -- warnings -----------------------------------------------------------------
 
