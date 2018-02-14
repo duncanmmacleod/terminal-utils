@@ -16,7 +16,7 @@ PATH=${PYTHON_USER_BASE}/bin:${PATH}
 # -- utilities ----------------------------------------------------------------
 
 pip-reinstall() {
-    local cmd="python -m pip install . --quiet --upgrade --upgrade-strategy=only-if-needed"
+    local cmd="python -m pip install . --upgrade --upgrade-strategy=only-if-needed $@"
     echo "$ ${cmd}"
     eval ${cmd}
 }
