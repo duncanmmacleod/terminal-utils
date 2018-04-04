@@ -37,6 +37,14 @@ _prompt_git_branch() {
 }
 
 _prompt_user_host() {
+    # if in screen, use blue hostname
+    case $TERM in
+        screen)
+            echo "\[\033[${_COLOR_LIGHT_BLUE}m\]\h"
+            return 0
+            ;;
+    esac
+    # otherwise use red for shared account, or yellow
     case `whoami` in
         root|detchar|cbc)
             echo "\[\033[${_COLOR_LIGHT_RED}m\]\u@\h"
