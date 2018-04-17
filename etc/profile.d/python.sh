@@ -26,7 +26,7 @@ alias pipr="pip-reinstall"
 # -- warnings -----------------------------------------------------------------
 
 # always show DeprecationWarnings
-PYTHONWARNINGS="${PYTHONWARNINGS},always::DeprecationWarning,always::PendingDeprecationWarning"
+PYTHONWARNINGS="${PYTHONWARNINGS},module::DeprecationWarning,module::PendingDeprecationWarning"
 
 # hide annoying type warnings from backports.configparser
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:You passed a bytestring:DeprecationWarning"
