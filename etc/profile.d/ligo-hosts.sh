@@ -103,14 +103,8 @@ alias marlin="echo $ gsissh ${MARLIN}; gsissh ${MARLIN}"
 
 
 # Raven (ARCCA)
-export GEO2=geo2.arcca.cf.ac.uk
-alias geo2="echo $ gsissh spxdmm@${GEO2}; gsissh spxdmm@${GEO2}"
-export RAVEN=ravenlogin.arcca.cf.ac.uk
-alias raven="echo $ ssh spxdmm@${RAVEN}; ssh spxdmm@${RAVEN}"
-export RAVEN1=ravenlogin01.arcca.cf.ac.uk
-alias raven1="echo $ ssh spxdmm@${RAVEN1}; ssh spxdmm@${RAVEN1}"
-export RAVEN2=ravenlogin02.arcca.cf.ac.uk
-alias raven2="echo $ ssh spxdmm@${RAVEN2}; ssh spxdmm@${RAVEN2}"
+export ARCCA="ligo.arcca.cf.ac.uk"
+alias arcca="echo $ gsissh ${ARCCA}; gsissh ${ARCCA}"
 
 
 # IUCAA
