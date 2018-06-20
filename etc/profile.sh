@@ -8,13 +8,15 @@
 # Author: Duncan Macleod <duncan.macleod@ligo.org>
 #
 
-# declare an alias for 'readlink' on macports systems
-if [[ ${OSTYPE} == *"darwin"* ]]; then
-    alias readlink="greadlink"
-fi
+
+# provide custom readlink for people who don't have `readlink`
+readlink() {
+    [[ "$1" == "-f" ]] && shift 1
+    python -c "import os,sys; print(os.path.realpath('$@'))"
+}
 
 # source all of the login scripts
-_here=$(cd "$(dirname $(readlink -f "${BASH_SOURCE[0]}"))" && pwd)
+_here=$(cd "$(dirname $(readlink "${BASH_SOURCE[0]}"))" && pwd)
 _profile_dir="${_here}/profile.d"
 if [ -d ${_profile_dir} ] && [[ "$-" == *"i"* ]]; then
     for _profile in ${_profile_dir}/*.sh; do
@@ -22,7 +24,4 @@ if [ -d ${_profile_dir} ] && [[ "$-" == *"i"* ]]; then
     done
 fi
 
-# undeclare the alias
-if [[ ${OSTYPE} == *"darwin"* ]]; then
-    unalias readlink 2>/dev/null
-fi
+unset -f readlink

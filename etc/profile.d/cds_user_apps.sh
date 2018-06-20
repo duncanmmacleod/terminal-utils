@@ -8,8 +8,6 @@
 export USERAPPS_DIR=${HOME}/svn/cds_user_apps/trunk
 USERAPPS_ENV=${USERAPPS_DIR}/etc/userapps-user-env.sh
 
-[[ ${OSTYPE} == *"darwin"* ]] && alias readlink="greadlink"
-
 if [ -f ${USERAPPS_ENV} ]; then
     cleanpath USERAPPS_LIB_PATH
     for _obs in h l; do
@@ -25,5 +23,3 @@ fi
 
 cleanpath MATLABPATH
 export MATLABPATH
-
-[[ ${OSTYPE} == *"darwin"* ]] && unalias readlink
