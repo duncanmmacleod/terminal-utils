@@ -5,11 +5,15 @@
 # Author: Duncan Macleod <duncan.macleod@ligo.org>
 #
 
-export USERAPPS_DIR=${HOME}/svn/cds_user_apps/trunk
+if [ -z ${USERAPPS_DIR+x} ]; then
+    export USERAPPS_DIR=${HOME}/svn/cds_user_apps/trunk
+fi
 USERAPPS_ENV=${USERAPPS_DIR}/etc/userapps-user-env.sh
 
-if [ -f ${USERAPPS_ENV} ]; then
+if [ -d ${USERAPPS_DIR} ] && [ -f ${USERAPPS_ENV} ]; then
     cleanpath USERAPPS_LIB_PATH
+    _ifo=$ifo
+    _site=$site
     for _obs in h l; do
         ifo=${_obs}1
         site=l${_obs}o
@@ -18,8 +22,22 @@ if [ -f ${USERAPPS_ENV} ]; then
             MATLABPATH=${USERAPPS_LIB_PATH}:${MATLABPATH}
         fi
     done
-    unset _obs ifo site
-fi
 
-cleanpath MATLABPATH
-export MATLABPATH
+    # undo variable overrides
+    if [ -n $_ifo ]; then
+        ifo=$_ifo
+        unset _ifo
+    else
+        unset ifo
+    fi
+    if [ -n $_site ]; then
+        site=$_site
+        unset _site
+    else
+        unset site
+    fi
+    unset _obs
+
+    cleanpath MATLABPATH
+    export MATLABPATH
+fi
