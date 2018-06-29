@@ -8,6 +8,8 @@
 # KRB5_KTNAME should contain the path of the kerberos keytab for this account
 # LIGO_USER should be set to the albert.einstein LIGO.ORG username for this user
 
+command -v ligo-proxy-init 1>/dev/null || return
+
 if [ -f "${KRB5_KTNAME}" ]; then
     # run kinit using keytab
     export KRB5_KTNAME
