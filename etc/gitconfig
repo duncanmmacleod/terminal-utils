@@ -8,7 +8,7 @@
 	wsErrorHighlight = all
 [alias]
 	spull = !git stash && git pull --rebase && git stash apply
-	upfork = !git pull --rebase upstream master
-	upforkd = !git pull --rebase upstream develop
+	upfork = pull --rebase upstream master
+	upforkd = pull --rebase upstream develop
 	pr = "!f() { git fetch origin +refs/pull/$1/merge:; git checkout -qf FETCH_HEAD; }; f"
 	mr = "!f() { git fetch origin +refs/merge-requests/$1/head:; git checkout -qf FETCH_HEAD; }; f"
