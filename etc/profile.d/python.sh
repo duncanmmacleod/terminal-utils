@@ -42,4 +42,7 @@ PYTHONWARNINGS="${PYTHONWARNINGS},ignore:This method will be removed in future v
 # hide warnings about elementwise comparisons
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:elementwise != comparison failed; this will raise an error in the future:DeprecationWarning"
 
+# hide warnings about imp module
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:the imp module:DeprecationWarning"
+
 export PYTHONWARNINGS
