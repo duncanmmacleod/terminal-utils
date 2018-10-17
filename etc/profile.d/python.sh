@@ -26,6 +26,9 @@ pip-reinstall() {
 alias pipr="pip-reinstall"
 
 # -- warnings -----------------------------------------------------------------
+#
+# python warnings are parsed in order left-to-right, so to add overrides,
+# add them at the _end_ of the PYTHONWARNINGS variable.
 
 # always show DeprecationWarnings
 PYTHONWARNINGS="${PYTHONWARNINGS},module::DeprecationWarning,module::PendingDeprecationWarning"
@@ -44,5 +47,8 @@ PYTHONWARNINGS="${PYTHONWARNINGS},ignore:elementwise != comparison failed; this 
 
 # hide warnings about imp module
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:the imp module:DeprecationWarning"
+
+# hide warnings about metadata in ipython/jupyter
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:metadata:DeprecationWarning"
 
 export PYTHONWARNINGS
