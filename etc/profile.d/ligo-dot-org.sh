@@ -31,15 +31,20 @@ else
     alias lpi="ligo-proxy-init"
 fi
 
-# use kerberos for ligo-proxy-init
-grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
+# only if we aren't using a robot certificate, do the following:
+if [ -z ${X509_USER_CERT} ]; then
 
-# override gsi commands to check grid-proxy before running
-function gsissh {
+    # use kerberos for ligo-proxy-init, but not with a robot cert
     grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
-    command gsissh $@
-}
-function gsiscp {
-    grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
-    command gsiscp $@
-}
+
+    # override gsi commands to check grid-proxy before running
+    function gsissh {
+        grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
+        command gsissh $@
+    }
+    function gsiscp {
+        grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
+        command gsiscp $@
+    }
+
+fi
