@@ -6,12 +6,8 @@
 #
 
 # get vital information from python itself
-read PYTHON_VERSION PYTHON_USER_BASE PYTHON_USER_SITE <<< `python -c "
-import site; from sys import version_info as vi; print('{0[0]}.{0[1]} {1} {2}'.format(vi, site.getuserbase(), site.getusersitepackages()))"`
-export PYTHON_VERSION PYTHON_USER_BASE PYTHON_USER_SITE
-
-# set --user PATH
-PATH=${PYTHON_USER_BASE}/bin:${PATH}
+PYTHON_VERSION=$(python -c "
+from sys import version_info as vi; print('{0[0]}.{0[1]}'.format(vi))")
 
 # -- utilities ----------------------------------------------------------------
 
