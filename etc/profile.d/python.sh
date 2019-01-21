@@ -47,4 +47,7 @@ PYTHONWARNINGS="${PYTHONWARNINGS},ignore:the imp module:DeprecationWarning"
 # hide warnings about metadata in ipython/jupyter
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:metadata:DeprecationWarning"
 
+# hide warnings about collections.abc in python>=3.7
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:Using or importing the ABCs:DeprecationWarning"
+
 export PYTHONWARNINGS
