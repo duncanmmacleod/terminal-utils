@@ -43,6 +43,8 @@ export LLOPCDEV2=ldas-pcdev2.ligo-la.caltech.edu
 alias llopcdev2="echo $ gsissh ${LLOPCDEV2}; gsissh ${LLOPCDEV2}"
 export LLOPCDEV5=ldas-pcdev5.ligo-la.caltech.edu
 alias llopcdev5="echo $ gsissh ${LLOPCDEV5}; gsissh ${LLOPCDEV5}"
+export LLOPCDEV6=ldas-pcdev6.ligo-la.caltech.edu
+alias llopcdev6="echo $ gsissh ${LLOPCDEV6}; gsissh ${LLOPCDEV6}"
 
 
 # MIT
@@ -94,6 +96,8 @@ alias sugarpcdev2="echo $ gsissh ${SUGARPCDEV2}; gsissh ${SUGARPCDEV2}"
 
 
 # Nemo (UWM)
+export NEMO="submit.ligo.uwm.edu"
+alias nemo="echo $ gsissh ${NEMO}; gsissh ${NEMO}"
 export HYDRA=hydra.phys.uwm.edu
 alias hydra="echo $ gsissh ${HYDRA}; gsissh ${HYDRA}"
 export HYDRAPCDEV1=pcdev1.phys.uwm.edu
