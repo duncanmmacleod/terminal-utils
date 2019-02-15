@@ -27,6 +27,16 @@ find_conda() {
 }
 
 
+forgeupdate() {
+    echo_and_execute conda update --name base conda-smithy conda-forge-pinning $@
+}
+
+forgeregen() {
+    forgeupdate --yes --quiet
+    echo_and_execute conda smithy regenerate
+}
+
+
 # find conda installation
 if [ -z ${CONDA_PATH+x} ]; then
     CONDA_PATH=$(find_conda)
