@@ -42,7 +42,11 @@ if [ -z ${CONDA_PATH+x} ]; then
     CONDA_PATH=$(find_conda)
 fi
 
-# add /bin/ to the PATH
-if [ -d ${CONDA_PATH}/bin ]; then
+# setup conda
+if [ -f ${CONDA_PATH}/etc/profile.d/conda.sh ]; then
+    source ${CONDA_PATH}/etc/profile.d/conda.sh
+elif [ -d ${CONDA_PATH}/condabin ]; then
+    export PATH=${PATH}:${CONDA_PATH}/condabin
+elif [ -d ${CONDA_PATH}/bin ]; then
     export PATH=${PATH}:${CONDA_PATH}/bin
 fi
