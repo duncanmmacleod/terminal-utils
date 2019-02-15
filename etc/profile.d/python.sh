@@ -27,7 +27,7 @@ alias pipr="pip-reinstall"
 # add them at the _end_ of the PYTHONWARNINGS variable.
 
 # always show DeprecationWarnings
-PYTHONWARNINGS="${PYTHONWARNINGS},module::DeprecationWarning,module::PendingDeprecationWarning"
+PYTHONWARNINGS="${PYTHONWARNINGS},default::DeprecationWarning,default::PendingDeprecationWarning"
 
 # hide annoying type warnings from backports.configparser
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:You passed a bytestring:DeprecationWarning"
@@ -49,5 +49,11 @@ PYTHONWARNINGS="${PYTHONWARNINGS},ignore:metadata:DeprecationWarning"
 
 # hide warnings about collections.abc in python>=3.7
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:Using or importing the ABCs:DeprecationWarning"
+
+# hide warnings about unicode file mode
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:'U' mode is deprecated"
+
+# hide deprecation warnings from matplotlib
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:examples,ignore:The text.latex.unicode"
 
 export PYTHONWARNINGS
