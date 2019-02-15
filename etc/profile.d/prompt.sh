@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Prompt styling
 #
@@ -28,9 +29,17 @@ _COLOR_WHITE=97
 # -- utilities ----------------------------------
 
 _prompt_git_branch() {
-    local branch=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'`
-    if [ -n "$branch" ]; then
-        echo "$branch"
+    local branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
+    if [[ "$branch" == "(HEAD detached at "* ]]; then  # on a tag (or similar)
+        echo " ($(echo $branch | cut -d\  -f4)"  # display tag name
+    elif [ -n "$branch" ]; then
+        # annotate branch name with tag if exactly on a tag (but not detached)
+        local tag=$(git describe --exact-match --tags HEAD 2> /dev/null || true)
+        if [ -n "$tag" ]; then
+            echo " ($branch@$tag)"
+        else
+            echo " ($branch)"
+        fi
     else
         return
     fi
