@@ -31,3 +31,10 @@ cleanpath() {
     eval $1=${badpath}
     eval export $1
 }
+
+
+# echo a command to the shell as "$ <command>" and then run it
+echo_and_execute() {
+    echo "$ $@"
+    "$@"
+}
