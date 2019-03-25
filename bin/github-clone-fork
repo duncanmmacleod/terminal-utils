@@ -6,6 +6,7 @@
 import argparse
 import getpass
 import os
+import subprocess
 
 if getpass.getuser() in ['duncan', 'duncan.macleod']:
     DEFAULT_USER='duncanmmacleod'
@@ -15,11 +16,11 @@ else:
 DEFAULT_VIRTUALENV_BASE = os.path.expanduser('~/opt')
 
 
-def shell(cmd):
-    print("$ %s" % cmd)
-    exitcode = os.system(cmd)
-    if exitcode:
-        raise RuntimeError("%r failed" % cmd)
+def shell(cmd, *args, **kwargs):
+    if isinstance(cmd, str):
+        cmd = cmd.split()
+    print("$ {}".format(" ".join(cmd)))
+    subprocess.check_call(cmd, *args, **kwargs)
 
 
 parser = argparse.ArgumentParser(
@@ -51,17 +52,32 @@ parser.add_argument('--virtualenv-args', default='',
 args = parser.parse_args()
 args.target = os.path.normpath(args.target)
 
-try:
-    org, repo = args.upstream.split('/', 1)
-except ValueError:
-    org = repo = args.upstream
-
-if args.git_server.startswith('git@'):
-    prefix = '%s:' % args.git_server
+# parse repo path
+parts = args.upstream.rsplit('/', 2)
+if len(parts) == 3:
+    host, org, repo = parts
+elif len(parts) == 2:
+    host = args.git_server
+    org, repo = parts
 else:
-    prefix = '%s/' % args.git_server
-upstream = '%s%s/%s.git' % (prefix, org, repo)
-fork = '%s%s/%s.git' % (prefix, args.user, repo)
+    host = args.git_server
+    org = repo = parts[0]
+
+if not repo.endswith(".git"):
+    repo += ".git"
+host += ":" if host.startswith('git@') else "/"
+
+# define upstream and fork URLs
+upstream = "{host}{user}/{repo}".format(
+    host=host,
+    user=org,
+    repo=repo,
+)
+fork = "{host}{user}/{repo}".format(
+    host=host,
+    user=args.user,
+    repo=repo,
+)
 
 # clone the repo
 cloneargs = [fork, args.target]
@@ -91,5 +107,5 @@ if args.virtualenv == 'DEFAULT':
     args.virtualenv = os.path.join(DEFAULT_VIRTUALENV_BASE,
                                    os.path.split(args.target)[-1])
 if args.virtualenv:
-    shell('virtualenv --quiet %s %s' % (args.virtualenv, args.virtualenv_args))
+    shell('python -m virtualenv --quiet %s %s' % (args.virtualenv, args.virtualenv_args))
     print("Virtualenv is ready in %s" % args.virtualenv.split()[0])
