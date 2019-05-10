@@ -45,7 +45,7 @@ parser.add_argument('-V', '--virtualenv', type=os.path.expanduser, metavar='DIR'
                     help='create a virtualenv in %(metavar)s to use for '
                          'this fork, if --%(dest)s is given without a '
                          '%(metavar)s, one will be created under '
-                         '{}'.format(DEFAULT_VIRTUALENV_BASE))
+                         '{0}'.format(DEFAULT_VIRTUALENV_BASE))
 parser.add_argument('--virtualenv-args', default='',
                     help='arguments to pass to `virtualenv` command')
 
