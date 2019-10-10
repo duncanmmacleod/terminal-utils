@@ -36,6 +36,26 @@ forgeregen() {
     echo_and_execute conda smithy regenerate
 }
 
+###############################
+# Activate a conda environment
+# ready for building C packages
+###############################
+conda_build_environment() {
+    local name=$1
+    shift 1
+    conda activate ${name} 1>/dev/null
+    export PREFIX="${CONDA_PREFIX}"
+    export CONDA_BUILD="1"
+    export CPPFLAGS="${CPPFLAGS} -UNDEBUG"
+    conda activate ${name} 1>/dev/null
+    echo "conda environment in ${CONDA_PREFIX} active"
+    echo "| CC:       ${CC}"
+    echo "| CFLAGS:   ${CFLAGS}"
+    echo "| CPPFLAGS: ${CPPFLAGS}"
+    echo "| CXXFLAGS: ${CXXFLAGS}"
+    echo "| LDFLAGS:  ${LDFLAGS}"
+}
+
 
 # find conda installation
 if [ -z ${CONDA_PATH+x} ]; then
