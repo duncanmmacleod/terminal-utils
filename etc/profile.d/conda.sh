@@ -46,8 +46,8 @@ conda_build_environment() {
     conda activate ${name} 1>/dev/null
     export PREFIX="${CONDA_PREFIX}"
     export CONDA_BUILD="1"
-    export CPPFLAGS="${CPPFLAGS} -UNDEBUG"
     conda activate ${name} 1>/dev/null
+    export CPPFLAGS="${CPPFLAGS} -UNDEBUG"
     echo "conda environment in ${CONDA_PREFIX} active"
     echo "| CC:       ${CC}"
     echo "| CFLAGS:   ${CFLAGS}"
