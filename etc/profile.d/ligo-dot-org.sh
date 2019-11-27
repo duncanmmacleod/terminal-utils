@@ -23,7 +23,7 @@ if [ -f "${KRB5_KTNAME}" ]; then
     lpi() {
         klist -s &> /dev/null || \
             kinit -kft ${KRB5_KTNAME} ${LIGO_USER}@LIGO.ORG
-        ligo-proxy-init -k 1> /dev/null
+        ligo-proxy-init -k $@
     }
 
 else
@@ -35,15 +35,15 @@ fi
 if [ -z ${X509_USER_CERT} ]; then
 
     # use kerberos for ligo-proxy-init, but not with a robot cert
-    grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
+    grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi 1>/dev/null
 
     # override gsi commands to check grid-proxy before running
     function gsissh {
-        grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
+        grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi 1>/dev/null
         command gsissh $@
     }
     function gsiscp {
-        grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi
+        grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi 1>/dev/null
         command gsiscp $@
     }
 
