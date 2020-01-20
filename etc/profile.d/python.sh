@@ -21,6 +21,14 @@ pip-reinstall() {
 
 alias pipr="pip-reinstall"
 
+pip-download() {
+    local package=$1
+    shift 1
+    local cmd="python -m pip download --no-deps --no-binary=:all: $@ $package"
+    echo "$ ${cmd}"
+    eval ${cmd}
+}
+
 # -- warnings -----------------------------------------------------------------
 #
 # python warnings are parsed in order left-to-right, so to add overrides,
