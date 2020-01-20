@@ -14,3 +14,5 @@
 	pr = "!f() { git fetch origin +refs/pull/$1/merge:; git checkout -qf FETCH_HEAD; }; f"
 	mr = "!f() { git fetch origin +refs/merge-requests/$1/head:; git checkout -qf FETCH_HEAD; }; f"
 	gpush = push --signed=if-asked
+[push]
+	gpgSign = if-asked
