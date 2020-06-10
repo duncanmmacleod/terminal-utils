@@ -8,12 +8,10 @@ import getpass
 import os
 import subprocess
 
-if getpass.getuser() in ['duncan', 'duncan.macleod']:
-    DEFAULT_USER='duncanmmacleod'
+if getpass.getuser() in {'duncan', 'duncan.macleod', 'spxdmm'}:
+    DEFAULT_USER = 'duncanmmacleod'
 else:
-    DEFAULT_USER=None
-
-DEFAULT_VIRTUALENV_BASE = os.path.expanduser('~/opt')
+    DEFAULT_USER = None
 
 
 def shell(cmd, *args, **kwargs):
@@ -25,29 +23,49 @@ def shell(cmd, *args, **kwargs):
 
 parser = argparse.ArgumentParser(
     description=__doc__,
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('upstream', metavar='org/repo',
-                    help='URI of repo on github.com, e.g. gwpy/gwpy')
-parser.add_argument('target', help='target directory for clone',
-                    metavar='DIR')
-parser.add_argument('-u', '--user', help='username of fork owner',
-                    default=DEFAULT_USER, required=DEFAULT_USER is None)
-parser.add_argument('-s', '--git-server', default='https://github.com',
-                    help='URL of git server')
-parser.add_argument('--update', action='store_true', default=False,
-                    help='update the fork from upstream')
-parser.add_argument('--no-recursive', action='store_true', default=False,
-                    help='don\'t clone in a --recursive way')
-parser.add_argument('--verbose', action='store_true', default=False,
-                    help='don\'t use --quiet git commands')
-parser.add_argument('-V', '--virtualenv', type=os.path.expanduser, metavar='DIR',
-                    nargs='?', const='DEFAULT',
-                    help='create a virtualenv in %(metavar)s to use for '
-                         'this fork, if --%(dest)s is given without a '
-                         '%(metavar)s, one will be created under '
-                         '{0}'.format(DEFAULT_VIRTUALENV_BASE))
-parser.add_argument('--virtualenv-args', default='',
-                    help='arguments to pass to `virtualenv` command')
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+)
+parser.add_argument(
+    'upstream',
+    metavar='org/repo',
+    help='URI of repo on github.com, e.g. gwpy/gwpy',
+)
+parser.add_argument(
+    'target',
+    help='target directory for clone',
+    metavar='DIR',
+)
+parser.add_argument(
+    '-u',
+    '--user',
+    help='username of fork owner',
+    default=DEFAULT_USER,
+    required=DEFAULT_USER is None,
+)
+parser.add_argument(
+    '-s',
+    '--git-server',
+    default='https://github.com',
+    help='URL of git server',
+)
+parser.add_argument(
+    '--update',
+    action='store_true',
+    default=False,
+    help='update the fork from upstream',
+)
+parser.add_argument(
+    '--no-recursive',
+    action='store_true',
+    default=False,
+    help='don\'t clone in a --recursive way',
+)
+parser.add_argument(
+    '--verbose',
+    action='store_true',
+    default=False,
+    help='don\'t use --quiet git commands',
+)
 
 args = parser.parse_args()
 args.target = os.path.normpath(args.target)
@@ -101,11 +119,3 @@ if args.update:
         shell('git push --quiet')
 
 print("Fork is ready in %s" % args.target)
-
-# create virtualenv
-if args.virtualenv == 'DEFAULT':
-    args.virtualenv = os.path.join(DEFAULT_VIRTUALENV_BASE,
-                                   os.path.split(args.target)[-1])
-if args.virtualenv:
-    shell('python -m virtualenv --quiet %s %s' % (args.virtualenv, args.virtualenv_args))
-    print("Virtualenv is ready in %s" % args.virtualenv.split()[0])
