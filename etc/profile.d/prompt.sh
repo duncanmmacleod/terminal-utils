@@ -26,6 +26,16 @@ _COLOR_LIGHT_MAGENTA=95
 _COLOR_LIGHT_CYAN=96
 _COLOR_WHITE=97
 
+# switch colours between macOS and others
+# just so users know where they are
+if [ "$(uname)" == "Darwin" ]; then
+   _COLOR1="${_COLOR_LIGHT_GREEN}"
+   _COLOR2="${_COLOR_LIGHT_YELLOW}"
+else
+   _COLOR1="${_COLOR_LIGHT_YELLOW}"
+   _COLOR2="${_COLOR_LIGHT_GREEN}"
+fi
+
 # -- utilities ----------------------------------
 
 _prompt_git_branch() {
@@ -53,13 +63,13 @@ _prompt_user_host() {
             return 0
             ;;
     esac
-    # otherwise use red for shared account, or yellow
+    # otherwise use red for shared account, or default
     case `whoami` in
         root|detchar|cbc)
             echo "\[\033[${_COLOR_LIGHT_RED}m\]\u@\h"
             ;;
         *)
-            echo "\[\033[${_COLOR_LIGHT_YELLOW}m\]\h"
+            echo "\[\033[${_COLOR1}m\]\h"
             ;;
     esac
 }
@@ -68,20 +78,30 @@ _prompt_user_host() {
 
 _set_prompt() {
     case $TERM in
+        # colour support
         xterm*|screen)
-            local col="\[\033[${_COLOR_LIGHT_YELLOW}m\]"
+            local col="\[\033[${_COLOR1}m\]"
             local psu=`_prompt_user_host`
             local td="\[\033[${_COLOR_MAGENTA}m\]\A"
-            local branch="\[\033[${_COLOR_LIGHT_GREEN}m\]\$(_prompt_git_branch)"
+            local branch="\[\033[${_COLOR2}m\]\$(_prompt_git_branch)"
             local dir_="\[\033[${_COLOR_LIGHT_CYAN}m\]\W"
             local endcol="\[\033[00m\]"
-            PS1="$col[$psu $td ${dir_}$branch$col]\$ $endcol"
+            PS1="$col[$psu $td ${dir_}$branch$col]\n\$ $endcol"
+            PS4="$col+ $endcol"
             ;;
+        # basic
         *)
-            PS1="[\h \@ \W]\\$ "
+            PS1="[\h \@ \W]\n\\$ "
+            PS4="+ "
             ;;
     esac
-    export PS1
+    # preserve conda prompt modifier
+    if [ ! -z ${CONDA_PROMPT_MODIFIER} ]; then
+        PS1="${CONDA_PROMPT_MODIFIER}${PS1}"
+    fi
+
+    # set the prompt
+    export PS1 PS4
 }
 
 _set_prompt  # actually set the prompt for this session
