@@ -8,6 +8,11 @@
 # KRB5_KTNAME should contain the path of the kerberos keytab for this account
 # LIGO_USER should be set to the albert.einstein LIGO.ORG username for this user
 
+# prefer LIGO's IdP by default
+if [ -x ${ECP_IDP} ]; then
+    export ECP_IDP="login.ligo.org"
+fi
+
 command -v ligo-proxy-init 1>/dev/null || return
 
 if [ -f "${KRB5_KTNAME}" ]; then
@@ -23,27 +28,27 @@ if [ -f "${KRB5_KTNAME}" ]; then
     lpi() {
         klist -s &> /dev/null || \
             kinit -kft ${KRB5_KTNAME} ${LIGO_USER}@LIGO.ORG
-        ligo-proxy-init -k $@
+        ecp-get-cert -i LIGO -k $@
     }
 
 else
     # set alias for init
-    alias lpi="ligo-proxy-init"
+    alias lpi="ecp-get-cert -i LIGO ${LIGO_USER}"
 fi
 
 # only if we aren't using a robot certificate, do the following:
 if [ -z ${X509_USER_CERT} ]; then
 
     # use kerberos for ligo-proxy-init, but not with a robot cert
-    grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi 1>/dev/null
+    ecp-cert-info --valid 00:01 &> /dev/null || lpi 1>/dev/null
 
     # override gsi commands to check grid-proxy before running
     function gsissh {
-        grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi 1>/dev/null
+        ecp-cert-info --valid 00:01 &> /dev/null || lpi 1>/dev/null
         command gsissh $@
     }
     function gsiscp {
-        grid-proxy-info -exists -valid 00:01 &> /dev/null || lpi 1>/dev/null
+        ecp-cert-info --valid 00:01 &> /dev/null || lpi 1>/dev/null
         command gsiscp $@
     }
 
