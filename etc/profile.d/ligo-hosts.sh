@@ -28,6 +28,10 @@ export CITPCDEV5=ldas-pcdev5.ligo.caltech.edu
 alias citpcdev5="echo $ ${_ssh} ${_user}${CITPCDEV5}; ${_ssh} ${_user}${CITPCDEV5}"
 export CITPCDEV6=ldas-pcdev6.ligo.caltech.edu
 alias citpcdev6="echo $ ${_ssh} ${_user}${CITPCDEV6}; ${_ssh} ${_user}${CITPCDEV6}"
+export CITPCDEV15=ldas-pcdev15.ligo.caltech.edu
+alias citpcdev15="echo $ ${_ssh} ${_user}${CITPCDEV15}; ${_ssh} ${_user}${CITPCDEV15}"
+export CITPCDEV16=ldas-pcdev16.ligo.caltech.edu
+alias citpcdev16="echo $ ${_ssh} ${_user}${CITPCDEV16}; ${_ssh} ${_user}${CITPCDEV16}"
 export CITOSG=ldas-osg.ligo.caltech.edu
 alias citosg="echo $ ${_ssh} ${_user}${CITOSG}; ${_ssh} ${_user}${CITOSG}"
 
