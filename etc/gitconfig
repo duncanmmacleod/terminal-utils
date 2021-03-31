@@ -1,8 +1,9 @@
 [alias]
 	spull = !git stash && git pull --rebase && git stash apply
-	upfork = pull --rebase upstream master
-	upforkd = pull --rebase upstream develop
-	upforkt = pull --rebase upstream testing
+	up = pull --rebase upstream
+	upfork = up master
+	upforkd = up develop
+	upforkt = up testing
 	pr = "!f() { git fetch origin +refs/pull/$1/merge:; git checkout -qf FETCH_HEAD; }; f"
 	mr = "!f() { git fetch origin +refs/merge-requests/$1/head:; git checkout -qf FETCH_HEAD; }; f"
 	gpush = push --signed=if-asked
