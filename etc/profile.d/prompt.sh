@@ -76,7 +76,26 @@ _prompt_user_host() {
 
 # -- setter -------------------------------------
 
+_set_ps4() {
+    case $TERM in
+        # colour support
+        xterm*|screen)
+            local col="\[\033[${_COLOR1}m\]"
+            local endcol="\[\033[00m\]"
+            PS4="$col+ $endcol"
+            ;;
+        # basic
+        *)
+            PS4="+ "
+            ;;
+    esac
+    export PS4
+}
+
+
 _set_prompt() {
+    local LAST_EXIT="$?"
+
     case $TERM in
         # colour support
         xterm*|screen)
@@ -88,20 +107,26 @@ _set_prompt() {
             local endcol="\[\033[00m\]"
             PS1="$col[$psu $td ${dir_}$branch$col]\n\$ $endcol"
             PS4="$col+ $endcol"
+            EXITSTATUS="\[\033[${_COLOR_RED}m\]!$endcol"
             ;;
         # basic
         *)
             PS1="[\h \@ \W]\n\\$ "
             PS4="+ "
+            EXITSTATUS="!"
             ;;
     esac
     # preserve conda prompt modifier
     if [ ! -z ${CONDA_PROMPT_MODIFIER} ]; then
         PS1="${CONDA_PROMPT_MODIFIER}${PS1}"
     fi
+    # show exit code
+    if [ ${LAST_EXIT} -ne 0 ]; then
+        PS1="${EXITSTATUS}${PS1}"
+    fi
 
-    # set the prompt
-    export PS1 PS4
 }
 
-_set_prompt  # actually set the prompt for this session
+# actually set the prompt for this session
+_set_ps4
+PROMPT_COMMAND=_set_prompt
