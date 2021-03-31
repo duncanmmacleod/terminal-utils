@@ -33,7 +33,7 @@ forgeupdate() {
 
 forgeregen() {
     forgeupdate --yes --quiet
-    echo_and_execute conda smithy regenerate
+    echo_and_execute conda smithy regenerate $@
 }
 
 ###############################
