@@ -13,7 +13,7 @@ if [ -x ${ECP_IDP} ]; then
     export ECP_IDP="login.ligo.org"
 fi
 
-command -v ligo-proxy-init 1>/dev/null || return
+command -v ecp-get-cert 1>/dev/null || return
 
 if [ -f "${KRB5_KTNAME}" ]; then
     # run kinit using keytab
@@ -39,7 +39,7 @@ fi
 # only if we aren't using a robot certificate, do the following:
 if [ -z ${X509_USER_CERT} ]; then
 
-    # use kerberos for ligo-proxy-init, but not with a robot cert
+    # use kerberos for ecp-get-cert, but not with a robot cert
     ecp-cert-info --valid 00:01 &> /dev/null || lpi 1>/dev/null
 
     # override gsi commands to check grid-proxy before running
