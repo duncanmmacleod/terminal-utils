@@ -45,7 +45,7 @@ parser.add_argument(
 parser.add_argument(
     '-s',
     '--git-server',
-    default='https://github.com',
+    default='git@github.com',
     help='URL of git server',
 )
 parser.add_argument(
