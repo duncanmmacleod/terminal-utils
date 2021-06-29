@@ -57,12 +57,33 @@ conda_build_environment() {
 }
 
 
-# find conda installation
+#############################
+# Build a conda package
+#############################
+conda_build() {
+    local args="$@"
+    conda activate base
+    cmd="conda build
+        --error-overlinking
+        --error-overdepending
+        ${args}
+    "
+    echo "+ ${cmd}"
+    eval ${cmd}
+}
+
+
+if [ -n ${CONDA_SHLVL+x} ]; then
+    # conda already initialised
+    return
+fi
+
 if [ -z ${CONDA_PATH+x} ]; then
+    # find conda installation
     CONDA_PATH=$(find_conda)
 fi
 
-# setup conda
+# initialise conda
 if [ -f ${CONDA_PATH}/etc/profile.d/conda.sh ]; then
     source ${CONDA_PATH}/etc/profile.d/conda.sh
 elif [ -d ${CONDA_PATH}/condabin ]; then
