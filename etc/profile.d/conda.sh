@@ -71,12 +71,11 @@ conda_build_environment() {
     echo "| LDFLAGS:  ${LDFLAGS}"
 }
 
-
 #############################
 # Build a conda package
 #############################
 conda_build() {
-    local args="$@"
+    local args="${*@Q}"
     conda activate base
     cmd="conda build
         --error-overlinking
@@ -87,6 +86,23 @@ conda_build() {
     eval ${cmd}
 }
 
+#############################
+# Build a conda package
+# using mamba as the solver
+#############################
+conda_mambabuild() {
+    local args="${*@Q}"
+    conda activate base
+    cmd="conda mambabuild
+        --error-overlinking
+        --error-overdepending
+        ${args}
+    "
+    echo "+ ${cmd}"
+    eval ${cmd}
+}
+
+# -- init environment
 
 if [ -n ${CONDA_SHLVL+x} ]; then
     # conda already initialised
@@ -106,3 +122,10 @@ elif [ -d ${CONDA_PATH}/condabin ]; then
 elif [ -d ${CONDA_PATH}/bin ]; then
     export PATH=${PATH}:${CONDA_PATH}/bin
 fi
+
+# add aliases for the functions
+alias conda-build="conda_build"
+alias conda-mambabuild="conda_mambabuild"
+
+# disable annoying mamba banner
+export MAMBA_NO_BANNER=1
