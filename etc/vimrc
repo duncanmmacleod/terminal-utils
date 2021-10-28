@@ -12,10 +12,6 @@ set ruler
 " use syntax highlighting
 syntax on
 
-" use solarized
-set background=dark
-"colorscheme solarized
-
 " highlight the last searched term
 set hlsearch
 
@@ -52,18 +48,6 @@ autocmd BufNewFile,BufRead *.tex set spell
 autocmd BufNewFile,BufRead *.latex set spell
 autocmd BufNewFile,BufRead *.txt set spell
 autocmd BufNewFile,BufRead *.rst set spell
-
-fun! IgnoreCamelCaseSpell()
-    syn match CamelCase /\<[A-Z][a-z]\+[A-Z].\{-}\>/ contains=@NoSpell transparent
-    syn cluster Spell add=CamelCase
-endfun
-autocmd BufRead,BufNewFile * :call IgnoreCamelCaseSpell()
-
-fun! IgnoreUpperCaseSpell()
-    syn match UPPERCASE /\<[A-Z]\+.\{-}\>/ contains=@NoSpell transparent
-    syn cluster Spell add=UPPERCASE
-endfun
-autocmd BufRead,BufNewFile * :call IgnoreUpperCaseSpell()
 
 " set template for new files
 autocmd! BufNewFile * silent! 0r ~/.vim/templates/%:e.%:e
