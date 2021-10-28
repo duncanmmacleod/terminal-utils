@@ -93,17 +93,19 @@ else:
     host = args.git_server
     org = repo = parts[0]
 
-if not repo.endswith(".git"):
-    repo += ".git"
-host += ":" if host.startswith('git@') else "/"
+# strip out scheme
+if host.startswith("git@"):
+    host = host[4:]
+elif host.startswith(("http://", "https://")):
+    host = host.split("//", 1)[1]
 
 # define upstream and fork URLs
-upstream = "{host}{user}/{repo}".format(
+upstream = "https://{host}/{user}/{repo}.git".format(
     host=host,
     user=org,
     repo=repo,
 )
-fork = "{host}{user}/{repo}".format(
+fork = "git@{host}:{user}/{repo}.git".format(
     host=host,
     user=args.user,
     repo=repo,
