@@ -109,12 +109,12 @@ conda_mambabuild() {
 
 # -- init environment
 
-if [ -n ${CONDA_SHLVL+x} ]; then
+if [ -n "${CONDA_SHLVL+x}" ]; then
     # conda already initialised
     return
 fi
 
-if [ -z ${CONDA_PATH+x} ]; then
+if [ -z "${CONDA_PATH+x}" ]; then
     # find conda installation
     CONDA_PATH=$(find_conda)
 fi
