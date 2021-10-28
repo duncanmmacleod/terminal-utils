@@ -41,9 +41,14 @@ find_conda() {
     return 1
 }
 
+conda_or_mamba() {
+    which mamba 1> /dev/null && echo "mamba" || echo ${CONDA_EXE}
+}
 
 forgeupdate() {
-    echo_and_execute conda update --name base conda-smithy conda-forge-pinning $@
+    echo_and_execute $(conda_or_mamba) update --name base \
+        conda-smithy \
+        $@
 }
 
 forgeregen() {
