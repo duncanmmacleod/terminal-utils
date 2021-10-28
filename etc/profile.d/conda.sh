@@ -16,12 +16,27 @@ find_conda() {
         local _home=${HOME}
     fi
 
+    local _hints=(
+        "mambaforge"
+        "miniforge3"
+        "miniconda3"
+        "anaconda3"
+        "conda"
+    )
+    local _roots=(
+        ${_home}
+        ${_home}/opt
+        /opt
+    )
+
     # prefer python3 over python3 and anaconda over miniconda
-    for _condaname in anaconda3 anaconda2 miniconda3 miniconda2; do
-        if [ -d ${_home}/${_condaname} ]; then
-            echo ${_home}/${_condaname}
-            return 0
-        fi
+    for _root in "${_roots[@]}"; do
+        for _condaname in "${_hints[@]}"; do
+            if [ -d ${_root}/${_condaname} ]; then
+                echo ${_root}/${_condaname}
+                return 0
+            fi
+        done
     done
     return 1
 }
