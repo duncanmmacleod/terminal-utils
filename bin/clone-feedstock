@@ -1,0 +1,83 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Copyright (C) 2021 Cardiff University
+
+"""Clone a conda-forge feedstock with various remotes
+"""
+
+import argparse
+import os
+import subprocess
+import sys
+
+GIT_HOST = "github.com"
+GITHUB_ORG = "conda-forge"
+CONDA_FORGE_BOT_NAME = "regro-cf-autotick-bot"
+
+if getpass.getuser() in {
+        'duncan',
+        'duncan.macleod',
+        'spxdmm',
+        'c.spxdmm',
+}:
+    DEFAULT_USER = 'duncanmmacleod'
+else:
+    DEFAULT_USER = None
+
+
+def create_parser():
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "feedstock",
+        help="name of the feedstock",
+    )
+    parser.add_argument(
+        "--username",
+        default=DEFAULT_USER,
+        required=DEFAULT_USER is None,
+        help="username for `origin` remote",
+    )
+    return parser
+
+
+def git(subcmd, *args, **kwargs):
+    check = kwargs.pop("check", True)
+    cmd = ["git", subcmd, *args]
+    print("$ {}".format(" ".join(cmd)))
+    if check:
+        return subprocess.check_call(cmd, **kwargs)
+    return subprocess.call(cmd, **kwargs)
+
+
+def main():
+    """Run the thing
+    """
+    parser = create_parser()
+    params = parser.parse_args()
+
+    # format namespace
+    feedstock = "{}-feedstock".format(params.feedstock)
+    git_url = "git@{}:{{}}/{}.git".format(GIT_HOST, feedstock)
+
+    # clone upstream
+    git("clone", git_url.format(GITHUB_ORG), "--origin", "upstream")
+    os.chdir(feedstock)
+    for uname, remote in (
+        (CONDA_FORGE_BOT_NAME, CONDA_FORGE_BOT_NAME),
+        (params.username, "origin"),
+    ):
+        git("remote", "add", remote, git_url.format(uname))
+        git("fetch", remote, check=False)
+
+    print("-- Feedstock cloned to {0}{1}{2}{1}".format(
+        os.curdir,
+        os.path.sep,
+        feedstock,
+    ))
+
+
+if __name__ == "__main__":
+    sys.exit(main())
