@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Clone a fork of a repository on github.com
+"""Clone a fork of a git repository
 """
 
 import argparse
@@ -21,19 +21,10 @@ def shell(cmd, *args, **kwargs):
     subprocess.check_call(cmd, *args, **kwargs)
 
 
-def get_branch_name():
-    for line in subprocess.check_output(["git", "branch"]).splitlines():
-        if line.startswith(b'*'):
-            return line.split()[-1].decode("utf-8")
-
-
-def link_upstream(upstream_url):
+def git_add_remote(url, remote="origin"):
     # link the original to the fork as 'upstream'
-    shell("git remote add upstream {}".format(upstream_url))
-    shell("git fetch --quiet upstream")
-    # link upstream branch as the reference
-    branch = get_branch_name()
-    shell("git branch --quiet {0} -u upstream/{0}".format(branch))
+    shell("git remote add {} {}".format(remote, url))
+    shell("git fetch --quiet {}".format(remote))
 
 
 parser = argparse.ArgumentParser(
@@ -46,9 +37,11 @@ parser.add_argument(
     help='URI of repo on github.com, e.g. gwpy/gwpy',
 )
 parser.add_argument(
-    'target',
+    '-t',
+    '--target',
     help='target directory for clone',
     metavar='DIR',
+    default=None,
 )
 parser.add_argument(
     '-u',
@@ -77,7 +70,6 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-args.target = os.path.normpath(args.target)
 
 # parse repo path
 parts = args.upstream.rsplit('/', 2)
@@ -92,6 +84,11 @@ elif len(parts) == 2:
 else:
     host = args.git_server
     org = repo = parts[0]
+
+# define default target
+if args.target is None:
+    args.target = repo
+args.target = os.path.normpath(args.target)
 
 # strip out scheme
 if host.startswith("git@"):
@@ -111,8 +108,8 @@ fork = "git@{host}:{user}/{repo}.git".format(
     repo=repo,
 )
 
-# clone the repo
-cloneargs = [fork, args.target]
+# clone the upstream repo first
+cloneargs = [upstream, args.target, "--origin", "upstream"]
 if not args.no_recursive:
     cloneargs.insert(0, '--recursive')
 if not args.verbose:
@@ -122,7 +119,11 @@ shell('git clone %s' % ' '.join(cloneargs))
 # enter the clone
 os.chdir(args.target)
 
-# use the upstream default branch
-link_upstream(upstream)
+# add the fork as a new remote
+git_add_remote(fork, "origin")
 
-print("Fork is ready in %s" % args.target)
+print("Fork is ready in {0}{1}{2}{1}".format(
+    os.curdir,
+    os.path.sep,
+    args.target,
+))
