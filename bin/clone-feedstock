@@ -15,15 +15,21 @@ GIT_HOST = "github.com"
 GITHUB_ORG = "conda-forge"
 CONDA_FORGE_BOT_NAME = "regro-cf-autotick-bot"
 
-if getpass.getuser() in {
+
+def _default_github_user():
+    user = getpass.getuser()
+    if user in {
         'duncan',
+        'duncan.macleod',
         'duncan.macleod',
         'spxdmm',
         'c.spxdmm',
-}:
-    DEFAULT_USER = 'duncanmmacleod'
-else:
-    DEFAULT_USER = None
+    }:
+        return 'duncanmmacleod'
+    return user
+
+
+DEFAULT_USER = os.getenv("GITHUB_USER", _default_github_user())
 
 
 def create_parser():

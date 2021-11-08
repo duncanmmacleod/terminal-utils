@@ -8,10 +8,21 @@ import getpass
 import os
 import subprocess
 
-if getpass.getuser() in {'duncan', 'duncan.macleod', 'spxdmm'}:
-    DEFAULT_USER = 'duncanmmacleod'
-else:
-    DEFAULT_USER = None
+
+def _default_github_user():
+    user = getpass.getuser()
+    if user in {
+        'duncan',
+        'duncan.macleod',
+        'duncan.macleod',
+        'spxdmm',
+        'c.spxdmm',
+    }:
+        return 'duncanmmacleod'
+    return user
+
+
+DEFAULT_USER = os.getenv("GITHUB_USER", _default_github_user())
 
 
 def shell(cmd, *args, **kwargs):
