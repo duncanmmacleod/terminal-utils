@@ -39,6 +39,13 @@ fi
 # -- utilities ----------------------------------
 
 _prompt_git_branch() {
+    # use function from git itself
+    if [[ "$(type -t __git_ps1)" == "function" ]]; then
+        __git_ps1
+        return
+    fi;
+
+    # otherwise a simpler homebrew version:
     local branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
     if [[ "$branch" == "(HEAD detached at "* ]]; then  # on a tag (or similar)
         echo " ($(echo $branch | cut -d\  -f4)"  # display tag name
