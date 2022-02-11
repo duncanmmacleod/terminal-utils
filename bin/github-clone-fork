@@ -95,6 +95,8 @@ elif len(parts) == 2:
 else:
     host = args.git_server
     org = repo = parts[0]
+if repo.endswith(".git"):
+    repo = repo[:-4]
 
 # define default target
 if args.target is None:
