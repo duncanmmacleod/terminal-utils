@@ -63,20 +63,26 @@ _prompt_git_branch() {
 }
 
 _prompt_user_host() {
+    if [[ -z "${WSL_DISTRO_NAME+x}" ]]; then
+        local _host="\h"
+    else
+        local _host="WSL-${WSL_DISTRO_NAME}"
+    fi
+
     # if in screen, use blue hostname
     case $TERM in
         screen)
-            echo "\[\033[${_COLOR_LIGHT_BLUE}m\]\h"
+            echo "\[\033[${_COLOR_LIGHT_BLUE}m\]${_host}"
             return 0
             ;;
     esac
     # otherwise use red for shared account, or default
     case `whoami` in
         root|detchar|cbc)
-            echo "\[\033[${_COLOR_LIGHT_RED}m\]\u@\h"
+            echo "\[\033[${_COLOR_LIGHT_RED}m\]\u@${_host}"
             ;;
         *)
-            echo "\[\033[${_COLOR1}m\]\h"
+            echo "\[\033[${_COLOR1}m\]${_host}"
             ;;
     esac
 }
