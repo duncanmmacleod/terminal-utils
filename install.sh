@@ -14,6 +14,9 @@ for profitem in ${HERE}/etc/*; do
 		ln -vs ${profitem} ~/etc/
 	fi
 done
+if [ ! -e ~/.vimrc ]; then
+	ln -vs ~/etc/vimrc ~/.vimrc
+fi
 if [ ! -e ~/.condarc ]; then
 	ln -vs ~/etc/condarc ~/.condarc
 fi
