@@ -20,3 +20,9 @@ fi
 if [ ! -e ~/.condarc ]; then
 	ln -vs ~/etc/condarc ~/.condarc
 fi
+if [ ! -e ~/.gitconfig ]; then
+	cat > ~/.gitconfig << EOF
+[include]
+	path = $(ls ~/etc/gitconfig)
+EOF
+fi
