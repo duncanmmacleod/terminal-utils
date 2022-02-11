@@ -5,16 +5,12 @@
 # Author: Duncan Macleod <duncan.macleod@ligo.org>
 #
 
-# get vital information from python itself
-PYTHON_VERSION=$(python -c "
-from sys import version_info as vi; print('{0[0]}.{0[1]}'.format(vi))")
-
 # -- utilities ----------------------------------------------------------------
 
 pip-reinstall() {
     local package=$1
     shift 1 || package="."
-    local cmd="python -m pip install --upgrade --upgrade-strategy=only-if-needed $package $@"
+    local cmd="${PYTHON:-python3} -m pip install --upgrade --upgrade-strategy=only-if-needed $package $@"
     echo "$ ${cmd}"
     eval ${cmd}
 }
@@ -24,7 +20,7 @@ alias pipr="pip-reinstall"
 pip-download() {
     local package=$1
     shift 1
-    local cmd="python -m pip download --no-deps --no-binary=:all: $@ $package"
+    local cmd="${PYTHON:-python3} -m pip download --no-deps --no-binary=:all: $@ $package"
     echo "$ ${cmd}"
     eval ${cmd}
 }

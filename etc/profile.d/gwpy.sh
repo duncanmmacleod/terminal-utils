@@ -1,7 +1,7 @@
 
 gtconvert() {
     local gpsordate="$@"
-    python -c "
+    ${PYTHON:-python3} -c "
 from gwpy.time import tconvert;
 print(tconvert('${gpsordate}'));
 "

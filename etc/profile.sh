@@ -12,7 +12,7 @@
 # provide custom readlink for people who don't have `readlink`
 readlink() {
     [[ "$1" == "-f" ]] && shift 1
-    python -c "import os,sys; print(os.path.realpath('$@'))"
+    ${PYTHON:-python3} -c "import os,sys; print(os.path.realpath('$@'))"
 }
 
 # source all of the login scripts
