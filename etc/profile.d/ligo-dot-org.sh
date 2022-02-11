@@ -13,8 +13,6 @@ if [ -x ${ECP_IDP} ]; then
     export ECP_IDP="login.ligo.org"
 fi
 
-command -v ecp-get-cert 1>/dev/null || return
-
 if [ -f "${KRB5_KTNAME}" ]; then
     # run kinit using keytab
     export KRB5_KTNAME
@@ -35,6 +33,8 @@ else
     # set alias for init
     alias lpi="ecp-get-cert -i LIGO ${LIGO_USER}"
 fi
+
+command -v ecp-get-cert 1>/dev/null || return
 
 # only if we aren't using a robot certificate, do the following:
 if [ -z ${X509_USER_CERT} ]; then
