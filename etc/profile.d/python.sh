@@ -60,4 +60,7 @@ PYTHONWARNINGS="${PYTHONWARNINGS},ignore:'U' mode is deprecated"
 # hide deprecation warnings from matplotlib
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:examples,ignore:The text.latex.unicode"
 
+# hide warnings about distutils
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:distutils Version classes are deprecated:DeprecationWarning:requests_mock"
+
 export PYTHONWARNINGS
