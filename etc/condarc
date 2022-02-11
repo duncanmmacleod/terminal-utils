@@ -1,6 +1,10 @@
 # vim: ft=yaml:
 # general purpose conda configuration
 
+channels:
+  - conda-forge
+  - igwn
+channel_priority: strict
 conda_build:
   error_overdepending: true
   error_overlinking: true
