@@ -8,7 +8,7 @@
 	mr = "!f() { git fetch upstream +refs/merge-requests/$1/head:; git checkout -qf FETCH_HEAD; }; f"
 	gpush = push --signed=if-asked
 [color]
-	ui = true
+	ui = auto
 [color "diff"]
 	whitespace = red reverse
 [color "status"]
