@@ -30,9 +30,6 @@ def _default_github_user():
     return user
 
 
-DEFAULT_USER = os.getenv("GITHUB_USER", _default_github_user())
-
-
 def shell(cmd, *args, **kwargs):
     if isinstance(cmd, str):
         cmd = cmd.split()
@@ -45,6 +42,8 @@ def git_add_remote(url, remote="origin"):
     shell("git remote add {} {}".format(remote, url))
     shell("git fetch --quiet {}".format(remote))
 
+
+DEFAULT_USER = os.getenv("GITHUB_USER", _default_github_user())
 
 parser = argparse.ArgumentParser(
     description=__doc__,
