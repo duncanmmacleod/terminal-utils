@@ -23,7 +23,7 @@ if [ -f "${KRB5_KTNAME}" ]; then
     fi
 
     # set function for kerberos-based init
-    lpi() {
+    function lpi() {
         klist -s &> /dev/null || \
             kinit -kft ${KRB5_KTNAME} ${LIGO_USER}@LIGO.ORG
         ecp-get-cert -i LIGO -k $@
