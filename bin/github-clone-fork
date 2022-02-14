@@ -6,7 +6,15 @@
 import argparse
 import getpass
 import os
+import re
 import subprocess
+
+REMOTE_REGEX = re.compile(
+    r"\A(?:http(?:s)?://|git@)"
+    r"(?P<host>[\w_\.-]+)(?::|/)"
+    r"(?P<group>\S+)/"
+    r"(?P<repo>[\w_\.-]+)\Z"
+)
 
 
 def _default_github_user():
@@ -82,21 +90,10 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-# parse repo path
-parts = args.upstream.rsplit('/', 2)
-if len(parts) == 3:
-    host, org, repo = parts
-elif len(parts) == 2 and parts[0].startswith("git@"):
-    repo = parts[1]
-    host, org = parts[0].rsplit(':', 1)
-elif len(parts) == 2:
-    host = args.git_server
-    org, repo = parts
-else:
-    host = args.git_server
-    org = repo = parts[0]
-if repo.endswith(".git"):
-    repo = repo[:-4]
+# parse repo name
+if args.upstream.endswith(".git"):
+    args.upstream = args.upstream[:-4]
+host, org, repo = REMOTE_REGEX.match(args.upstream).groups()
 
 # define default target
 if args.target is None:
