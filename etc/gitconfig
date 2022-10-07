@@ -1,12 +1,12 @@
 [alias]
+	cp = cherry-pick -x --gpg-sign
+	mr = "!f() { git fetch upstream +refs/merge-requests/$1/head:; git checkout -qf FETCH_HEAD; }; f"
+	pr = "!f() { git fetch upstream +refs/pull/$1/merge:; git checkout -qf FETCH_HEAD; }; f"
 	spull = !git stash && git pull --rebase && git stash apply
 	up = pull --rebase upstream
 	upfork = up master
 	upforkd = up develop
 	upforkt = up testing
-	pr = "!f() { git fetch upstream +refs/pull/$1/merge:; git checkout -qf FETCH_HEAD; }; f"
-	mr = "!f() { git fetch upstream +refs/merge-requests/$1/head:; git checkout -qf FETCH_HEAD; }; f"
-	gpush = push --signed=if-asked
 [color]
 	ui = auto
 [color "diff"]
@@ -15,6 +15,8 @@
 	branch = yellow
 [diff]
 	wsErrorHighlight = all
+[init]
+	defaultBranch = main
 [log]
 	decorate = full
 [push]
