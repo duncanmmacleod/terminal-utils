@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Copyright (C) 2021 Cardiff University
+# Copyright (C) 2022 Cardiff University
 
-"""Clone a conda-forge feedstock with various remotes
+"""Clone a conda-forge feedstock with various remotes.
 """
 
 import argparse
@@ -10,6 +10,7 @@ import getpass
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 GIT_HOST = "github.com"
 GITHUB_ORG = "conda-forge"
@@ -33,6 +34,8 @@ DEFAULT_USER = os.getenv("GITHUB_USER", _default_github_user())
 
 
 def create_parser():
+    """Create an `argparse.ArgumentParser` for this utility.
+    """
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -42,6 +45,13 @@ def create_parser():
         help="name of the feedstock",
     )
     parser.add_argument(
+        "-H",
+        "--git-host",
+        default=GIT_HOST,
+        help="FQDN of git host to talk to",
+    )
+    parser.add_argument(
+        "-u",
         "--username",
         default=DEFAULT_USER,
         required=DEFAULT_USER is None,
@@ -51,39 +61,37 @@ def create_parser():
 
 
 def git(subcmd, *args, **kwargs):
+    """Run a `git` subcommand using `subprocess.call`.
+    """
     check = kwargs.pop("check", True)
     cmd = ["git", subcmd, *args]
-    print("$ {}".format(" ".join(cmd)))
+    print(f"$ {' '.join(cmd)}")
     if check:
         return subprocess.check_call(cmd, **kwargs)
     return subprocess.call(cmd, **kwargs)
 
 
 def main():
-    """Run the thing
+    """Run the thing.
     """
     parser = create_parser()
     params = parser.parse_args()
 
     # format namespace
-    feedstock = "{}-feedstock".format(params.feedstock)
-    git_url = "git@{}:{{}}/{}.git".format(GIT_HOST, feedstock)
+    feedstock = f"{params.feedstock}-feedstock"
+    git_url = f"git@{params.git_host}:{{}}/{feedstock}.git".format
 
     # clone upstream
-    git("clone", git_url.format(GITHUB_ORG), "--origin", "upstream")
+    git("clone", git_url(GITHUB_ORG), "--origin", "upstream")
     os.chdir(feedstock)
     for uname, remote in (
         (CONDA_FORGE_BOT_NAME, CONDA_FORGE_BOT_NAME),
         (params.username, "origin"),
     ):
-        git("remote", "add", remote, git_url.format(uname))
+        git("remote", "add", remote, git_url(uname))
         git("fetch", remote, check=False)
 
-    print("-- Feedstock cloned to {0}{1}{2}{1}".format(
-        os.curdir,
-        os.path.sep,
-        feedstock,
-    ))
+    print(f"-- Feedstock cloned to {Path.cwd()}")
 
 
 if __name__ == "__main__":
