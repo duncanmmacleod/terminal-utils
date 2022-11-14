@@ -36,6 +36,11 @@ else
    _COLOR2="${_COLOR_LIGHT_GREEN}"
 fi
 
+# source git-prompt.sh on macOS
+if [ -f "/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh" ]; then
+    . /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
+fi
+
 # -- utilities ----------------------------------
 
 _prompt_git_branch() {
