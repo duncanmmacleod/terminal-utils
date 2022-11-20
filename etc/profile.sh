@@ -16,8 +16,8 @@ readlink() {
 }
 
 # source all of the login scripts
-_here=$(cd "$(dirname $(readlink "${BASH_SOURCE[0]}"))" && pwd)
-_profile_dir="${_here}/profile.d"
+_terminal_utils_base=$(cd "$(dirname $(readlink "${BASH_SOURCE[0]}"))" && pwd)
+_profile_dir="${_terminal_utils_base}/profile.d"
 if [ -d ${_profile_dir} ] && [[ "$-" == *"i"* ]]; then
     for _profile in ${_profile_dir}/*.sh; do
         . ${_profile}
