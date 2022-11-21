@@ -9,10 +9,10 @@
 # LIGO_USER should be set to the albert.einstein LIGO.ORG username for this user
 
 # prefer LIGO's IdP by default
-if [ -x ${ECP_IDP} ]; then
+if [ -z ${ECP_IDP+x} ]; then
     export ECP_IDP="login.ligo.org"
 fi
-if [ -x "${HTGETTOKENOPTS}" ]; then
+if [ -z "${HTGETTOKENOPTS+x}" ]; then
     export HTGETTOKENOPTS="--vaultserver vault.ligo.org --issuer igwn"
 fi
 
