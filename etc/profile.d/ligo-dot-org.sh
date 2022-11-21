@@ -13,7 +13,7 @@ if [ -x ${ECP_IDP} ]; then
     export ECP_IDP="login.ligo.org"
 fi
 if [ -x "${HTGETTOKENOPTS}" ]; then
-    export HTGETTOKENOPTS="--vaultserver vault.ligo.org"
+    export HTGETTOKENOPTS="--vaultserver vault.ligo.org --issuer igwn"
 fi
 
 if [ -f "${KRB5_KTNAME}" ]; then
