@@ -53,7 +53,7 @@ forgeupdate() {
 
 forgeregen() {
     forgeupdate --yes --quiet
-    echo_and_execute conda smithy regenerate $@
+    echo_and_execute conda run --name base conda smithy regenerate $@
 }
 
 ###############################
