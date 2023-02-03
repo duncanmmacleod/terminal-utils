@@ -43,7 +43,9 @@ command -v ecp-get-cert 1>/dev/null || return
 if [ -z ${X509_USER_CERT} ]; then
 
     # use kerberos for ecp-get-cert, but not with a robot cert
-    ecp-cert-info --valid 00:01 &> /dev/null || lpi 1>/dev/null
+    if [ -f "${KRB5_KTNAME}" ]; then
+        ecp-cert-info --valid 00:01 &> /dev/null || lpi 1>/dev/null
+    fi
 
     # override gsi commands to check grid-proxy before running
     function gsissh {
