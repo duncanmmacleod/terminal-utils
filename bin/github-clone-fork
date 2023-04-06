@@ -92,7 +92,11 @@ args = parser.parse_args()
 # parse repo name
 if args.upstream.endswith(".git"):
     args.upstream = args.upstream[:-4]
-host, org, repo = REMOTE_REGEX.match(args.upstream).groups()
+if not "://" in args.upstream:
+    host = "github.com"
+    org, repo = args.upstream.rsplit("/", 1)
+else:
+    host, org, repo = REMOTE_REGEX.match(args.upstream).groups()
 
 # define default target
 if args.target is None:
