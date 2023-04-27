@@ -137,5 +137,8 @@ fi
 alias conda-build="conda_build"
 alias conda-mambabuild="conda_mambabuild"
 
+# run conda-smithy with debug logging
+export CONDA_SMITHY_LOGLEVEL="DEBUG"
+
 # disable annoying mamba banner
 export MAMBA_NO_BANNER=1
