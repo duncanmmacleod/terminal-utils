@@ -63,4 +63,7 @@ PYTHONWARNINGS="${PYTHONWARNINGS},ignore:examples,ignore:The text.latex.unicode"
 # hide warnings about distutils
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:distutils Version classes are deprecated:DeprecationWarning:requests_mock"
 
+# hide warnings about pkg_resources
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:Deprecated call to \`pkg_resources:DeprecationWarning,ignore:pkg_resources is deprecated"
+
 export PYTHONWARNINGS
