@@ -195,7 +195,7 @@ alias virgo2="log_ssh macleod@${VIRGO2}"
 
 # gracedb processor
 export EMFOLLOW="emfollow.ligo.caltech.edu"
-alias emfollow="log_ssh gracedb.processor@${EMFOLLOW}"
+alias emfollow="log_ssh ${_user}${EMFOLLOW}"
 
 # KAGRA
 export KAGRA="157.82.231.171"
