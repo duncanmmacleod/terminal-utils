@@ -115,14 +115,6 @@ alias sugarpcdev2="log_ssh ${_user}${SUGARPCDEV2}"
 # Nemo (UWM)
 export NEMO="submit.ligo.uwm.edu"
 alias nemo="log_ssh ${_user}${NEMO}"
-export HYDRA=hydra.phys.uwm.edu
-alias hydra="log_ssh ${_user}${HYDRA}"
-export HYDRAPCDEV1=pcdev1.phys.uwm.edu
-alias hydrapcdev1="log_ssh ${_user}${HYDRAPCDEV1}"
-export HYDRAPCDEV2=pcdev2.phys.uwm.edu
-alias hydrapcdev2="log_ssh ${_user}${HYDRAPCDEV2}"
-export MARLIN=marlin.phys.uwm.edu
-alias marlin="log_ssh ${_user}${MARLIN}"
 
 # Raven (ARCCA)
 export ARCCA="ligo.arcca.cf.ac.uk"
