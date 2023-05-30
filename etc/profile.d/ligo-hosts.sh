@@ -10,7 +10,7 @@ else
     _user="${LIGO_USER}@"
 fi
 
-_SSH_OPTIONS="-K"
+_SSH_OPTIONS=""
 
 function log_ssh() {
 	local target=$1
