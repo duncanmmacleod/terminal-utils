@@ -130,6 +130,10 @@ alias iucaa="log_ssh ${_user}${IUCAA}"
 export IUCAAPCDEV1=ldas-pcdev1.gw.iucaa.in
 alias iucaapcdev1="log_ssh ${_user}${IUCAAPCDEV1}"
 
+# PSU
+export PSU="ligo.gwave.ics.psu.edu"
+alias psu="log_ssh ${_user}${PSU}"
+
 # alias cluster logins for shared accounts
 alias citdetchar="log_ssh detchar@${CIT}"
 alias citcbc="log_ssh cbc@${CIT}"
