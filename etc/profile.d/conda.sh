@@ -46,14 +46,14 @@ conda_or_mamba() {
 }
 
 forgeupdate() {
-    echo_and_execute $(conda_or_mamba) update --name base \
+    echo_and_execute conda update --name base \
         conda-smithy \
         $@
 }
 
 forgeregen() {
     forgeupdate --yes --quiet
-    echo_and_execute conda run --name base conda smithy regenerate $@
+    echo_and_execute conda run --name base conda smithy regenerate --no-check-uptodate $@
 }
 
 ###############################
