@@ -27,6 +27,8 @@ cleanpath() {
     badpath="`echo "${badpath}" | awk -v RS=':' -v ORS=":" '!a[$1]++'`"
     # remove trailing colon
     badpath=${badpath%%:}
+    # remove leading colon
+    badpath=${badpath#:}
     # reset variable and export
     eval $1=${badpath}
     eval export $1
