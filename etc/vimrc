@@ -48,6 +48,7 @@ autocmd BufNewFile,BufRead *.tex set spell
 autocmd BufNewFile,BufRead *.latex set spell
 autocmd BufNewFile,BufRead *.txt set spell
 autocmd BufNewFile,BufRead *.rst set spell
+autocmd BufNewFile,BufRead CMakeLists.txt setlocal nospell
 
 " set template for new files
 autocmd! BufNewFile * silent! 0r ~/.vim/templates/%:e.%:e
