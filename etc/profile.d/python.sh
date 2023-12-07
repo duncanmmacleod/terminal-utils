@@ -66,4 +66,8 @@ PYTHONWARNINGS="${PYTHONWARNINGS},ignore:distutils Version classes are deprecate
 # hide warnings about pkg_resources
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:Deprecated call to \`pkg_resources:DeprecationWarning,ignore:pkg_resources is deprecated"
 
+# hide warnings about conda
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:conda.:DeprecationWarning"
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:conda.:PendingDeprecationWarning"
+
 export PYTHONWARNINGS
