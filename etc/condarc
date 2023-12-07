@@ -8,3 +8,4 @@ channel_priority: strict
 conda_build:
   error_overdepending: true
   error_overlinking: true
+solver: libmamba
