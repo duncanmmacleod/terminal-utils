@@ -7,12 +7,15 @@
 	upfork = up master
 	upforkd = up develop
 	upforkt = up testing
+	statusu = status --untracked-files=no
 [color]
 	ui = auto
 [color "diff"]
 	whitespace = red reverse
 [color "status"]
 	branch = yellow
+[commit]
+	verbose = true
 [diff]
 	wsErrorHighlight = all
 [init]
