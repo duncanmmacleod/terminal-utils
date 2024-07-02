@@ -37,9 +37,9 @@ alias citpcdev6="log_ssh ${_user}${CITPCDEV6}"
 export CITPCDEV8=ldas-pcdev8.ligo.caltech.edu
 alias citpcdev8="log_ssh ${_user}${CITPCDEV8}"
 export CITPCDEV15=ldas-pcdev15.ligo.caltech.edu
-alias citpcdev15="log_ssh ${_user}${CITPCDEV15}}"
+alias citpcdev15="log_ssh ${_user}${CITPCDEV15}"
 export CITPCDEV16=ldas-pcdev16.ligo.caltech.edu
-alias citpcdev16="log_ssh ${_user}${CITPCDEV16}}"
+alias citpcdev16="log_ssh ${_user}${CITPCDEV16}"
 export CITOSG=ldas-osg.ligo.caltech.edu
 alias citosg="log_ssh ${_user}${CITOSG}"
 
