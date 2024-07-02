@@ -8,36 +8,32 @@
 if [ -z ${USERAPPS_DIR+x} ]; then
     export USERAPPS_DIR=${HOME}/svn/cds_user_apps/trunk
 fi
-USERAPPS_ENV=${USERAPPS_DIR}/etc/userapps-user-env.sh
 
-if [ -d ${USERAPPS_DIR} ] && [ -f ${USERAPPS_ENV} ]; then
-    cleanpath USERAPPS_LIB_PATH
-    _ifo=$ifo
-    _site=$site
-    for _obs in h l; do
-        ifo=${_obs}1
-        site=l${_obs}o
-        . ${USERAPPS_ENV}
-        if [ -n ${USERAPPS_LIB_PATH} ]; then
-            MATLABPATH=${USERAPPS_LIB_PATH}:${MATLABPATH}
-        fi
-    done
+USERAPPS_ENV="${USERAPPS_DIR}/etc/userapps-user-env.sh"
 
-    # undo variable overrides
-    if [ -n $_ifo ]; then
-        ifo=$_ifo
-        unset _ifo
-    else
-        unset ifo
-    fi
-    if [ -n $_site ]; then
-        site=$_site
-        unset _site
-    else
-        unset site
-    fi
-    unset _obs
+remote_medm() {
+    local OBS=$(echo ${1::1} | awk '{print toupper($0)}')
+    shift 1
+    local obs=$(echo ${OBS} | awk '{print tolower($0)}')
 
-    cleanpath MATLABPATH
-    export MATLABPATH
-fi
+    export USERAPPS="${USERAPPS:-$USERAPPS_DIR}"
+
+    # set variables
+    export IFO="${OBS}1"
+    export ifo="${obs}1"
+    export SITE="L${OBS}O"
+    export site="l${obs}o"
+
+    # set up CDS MEDM paths
+    . ${USERAPPS_ENV}
+    EPICS_DISPLAY_PATH="${EPICS_DISPLAY_PATH}:${USERAPPS_MEDM_PATH}"
+
+    # add Guardian MEDM paths
+    EPICS_DISPLAY_PATH=${EPICS_DISPLAY_PATH}:$(python3 -c "import os; import guardian.medm.screens; print(os.pathsep.join(guardian.medm.screens.__path__))")
+
+    cleanpath EPICS_DISPLAY_PATH
+
+    # run remote MEDM
+    echo "Running medm_l${obs}o $@"
+    medm_l${obs}o $@
+}
