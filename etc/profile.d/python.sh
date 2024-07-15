@@ -70,4 +70,7 @@ PYTHONWARNINGS="${PYTHONWARNINGS},ignore:Deprecated call to \`pkg_resources:Depr
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:conda.:DeprecationWarning"
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:conda.:PendingDeprecationWarning"
 
+# hide warnings about datetime
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:datetime.datetime:DeprecationWarning:boltons.timeutils"
+
 export PYTHONWARNINGS
