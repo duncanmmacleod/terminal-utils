@@ -8,12 +8,15 @@ import getpass
 import os
 import re
 import subprocess
+import sys
+from pathlib import Path
 
 REMOTE_REGEX = re.compile(
     r"\A(?:http(?:s)?://|git@)"
     r"(?P<host>[\w_\.-]+)(?::|/)"
     r"(?P<group>\S+)/"
-    r"(?P<repo>[\w_\.-]+)\Z"
+    r"(?P<project>[\w_\.-]+?)"
+    r"(?:\.git)?\Z"
 )
 
 
@@ -28,6 +31,16 @@ def _default_github_user():
     }:
         return 'duncanmmacleod'
     return user
+
+
+def parse_url(url):
+    # parse project URL
+    try:
+        return REMOTE_REGEX.match(url).groups()
+    except AttributeError:
+        host = "github.com"
+        group, project = url.rsplit("/", 1)
+        return host, group, project
 
 
 def shell(cmd, *args, **kwargs):
@@ -45,98 +58,91 @@ def git_add_remote(url, remote="origin"):
 
 DEFAULT_USER = os.getenv("GITHUB_USER", _default_github_user())
 
-parser = argparse.ArgumentParser(
-    description=__doc__,
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-)
-parser.add_argument(
-    'upstream',
-    metavar='org/repo',
-    help='URI of repo on github.com, e.g. gwpy/gwpy',
-)
-parser.add_argument(
-    '-t',
-    '--target',
-    help='target directory for clone',
-    metavar='DIR',
-    default=None,
-)
-parser.add_argument(
-    '-u',
-    '--user',
-    help='username of fork owner',
-    default=DEFAULT_USER,
-    required=DEFAULT_USER is None,
-)
-parser.add_argument(
-    '-s',
-    '--git-server',
-    default='git@github.com',
-    help='URL of git server',
-)
-parser.add_argument(
-    '--no-recursive',
-    action='store_true',
-    default=False,
-    help='don\'t clone in a --recursive way',
-)
-parser.add_argument(
-    '--verbose',
-    action='store_true',
-    default=False,
-    help='don\'t use --quiet git commands',
-)
 
-args = parser.parse_args()
+def create_parser():
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        'upstream',
+        metavar='git@host/group/project',
+        help='URL of git project',
+    )
+    parser.add_argument(
+        '-t',
+        '--target',
+        help='target directory for clone link',
+        metavar='DIR',
+        default=None,
+    )
+    parser.add_argument(
+        '-u',
+        '--user',
+        help='username of fork owner',
+        default=DEFAULT_USER,
+        required=DEFAULT_USER is None,
+    )
+    parser.add_argument(
+        '--no-recursive',
+        action='store_true',
+        default=False,
+        help='don\'t clone in a --recursive way',
+    )
+    parser.add_argument(
+        '--verbose',
+        action='store_true',
+        default=False,
+        help='don\'t use --quiet git commands',
+    )
+    return parser
 
-# parse repo name
-if args.upstream.endswith(".git"):
-    args.upstream = args.upstream[:-4]
-if not "://" in args.upstream:
-    host = "github.com"
-    org, repo = args.upstream.rsplit("/", 1)
-else:
-    host, org, repo = REMOTE_REGEX.match(args.upstream).groups()
 
-# define default target
-if args.target is None:
-    args.target = repo
-args.target = os.path.normpath(args.target)
+def main(args=None):
+    # parse command-line arguments
+    parser = create_parser()
+    args = parser.parse_args(args=args)
 
-# strip out scheme
-if host.startswith("git@"):
-    host = host[4:]
-elif host.startswith(("http://", "https://")):
-    host = host.split("//", 1)[1]
+    # parse repo name
+    host, group, project = parse_url(args.upstream)
 
-# define upstream and fork URLs
-upstream = "https://{host}/{user}/{repo}.git".format(
-    host=host,
-    user=org,
-    repo=repo,
-)
-fork = "git@{host}:{user}/{repo}.git".format(
-    host=host,
-    user=args.user,
-    repo=repo,
-)
+    # define default target
+    if args.target is None:
+        args.target = project
+    args.target = os.path.normpath(args.target)
 
-# clone the upstream repo first
-cloneargs = [upstream, args.target, "--origin", "upstream"]
-if not args.no_recursive:
-    cloneargs.insert(0, '--recursive')
-if not args.verbose:
-    cloneargs.insert(0, '--quiet')
-shell('git clone %s' % ' '.join(cloneargs))
+    # -- clone the upstream repo
 
-# enter the clone
-os.chdir(args.target)
+    path = Path(host) / group / project
+    path.parent.mkdir(exist_ok=True, parents=True)
 
-# add the fork as a new remote
-git_add_remote(fork, "origin")
+    upstream = f"git@{host}:{group}/{project}.git"
+    cloneargs = [upstream, str(path), "--origin", "upstream"]
+    if not args.no_recursive:
+        cloneargs.insert(0, '--recursive')
+    if not args.verbose:
+        cloneargs.insert(0, '--quiet')
+    shell('git clone %s' % ' '.join(cloneargs))
 
-print("Fork is ready in {0}{1}{2}{1}".format(
-    os.curdir,
-    os.path.sep,
-    args.target,
-))
+    # -- link the upstream path to the local dir
+
+    if args.target != "-":
+        target = Path(args.target)
+        target.symlink_to(
+            path,
+            target_is_directory=True,
+        )
+
+    # -- add the fork as a new remote
+
+    here = Path.cwd()
+    os.chdir(path)
+    fork = f"git@{host}:{args.user}/{project}.git"
+    git_add_remote(fork, "origin")
+    os.chdir(here)
+
+    print(f"Fork is ready in {path}")
+
+
+if __name__ == "__main__":
+    sys.exit(main())
