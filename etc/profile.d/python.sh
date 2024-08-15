@@ -73,4 +73,7 @@ PYTHONWARNINGS="${PYTHONWARNINGS},ignore:conda.:PendingDeprecationWarning"
 # hide warnings about datetime
 PYTHONWARNINGS="${PYTHONWARNINGS},ignore:datetime.datetime:DeprecationWarning:boltons.timeutils"
 
+# hide sphinx warnings
+PYTHONWARNINGS="${PYTHONWARNINGS},ignore:nodes.Node::sphinxcontrib.programoutput"
+
 export PYTHONWARNINGS
