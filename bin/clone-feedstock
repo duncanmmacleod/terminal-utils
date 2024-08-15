@@ -14,6 +14,7 @@ from pathlib import Path
 
 GIT_HOST = "github.com"
 GITHUB_ORG = "conda-forge"
+CONDA_FORGE_ADMIN_NAME = "conda-forge-admin"
 CONDA_FORGE_BOT_NAME = "regro-cf-autotick-bot"
 
 
@@ -85,6 +86,7 @@ def main():
     git("clone", git_url(GITHUB_ORG), "--origin", "upstream")
     os.chdir(feedstock)
     for uname, remote in (
+        (CONDA_FORGE_ADMIN_NAME, CONDA_FORGE_ADMIN_NAME),
         (CONDA_FORGE_BOT_NAME, CONDA_FORGE_BOT_NAME),
         (params.username, "origin"),
     ):
