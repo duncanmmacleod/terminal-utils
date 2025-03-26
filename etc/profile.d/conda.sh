@@ -128,11 +128,6 @@ elif [ -d ${CONDA_PATH}/bin ]; then
     export PATH=${PATH}:${CONDA_PATH}/bin
 fi
 
-# initialise mamba
-if [ -f ${CONDA_PATH}/etc/profile.d/mamba.sh ]; then
-    source ${CONDA_PATH}/etc/profile.d/mamba.sh
-fi
-
 # add aliases for the functions
 alias conda-build="conda_build"
 alias conda-mambabuild="conda_mambabuild"
