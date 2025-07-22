@@ -6,7 +6,9 @@
 #
 
 # aliases
-alias rm='rm -i'
+if [ "${TERM_PROGRAM:-}" != "vscode" ]; then
+    alias rm='rm -i'
+fi
 alias view="vim -R"
 
 # environment
